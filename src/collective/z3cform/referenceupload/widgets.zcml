@@ -1,0 +1,22 @@
+<configure
+  xmlns:z3c="http://namespaces.zope.org/z3c"
+  xmlns="http://namespaces.zope.org/zope">
+
+  <z3c:widgetTemplate
+      mode="input"
+      widget=".interfaces.IReferenceUploadWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="templates/input.pt"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget=".interfaces.IReferenceUploadWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="templates/display.pt"
+      />
+
+  <adapter factory=".converter.ReferenceUploadDataConverter" />
+  <adapter factory=".datamanager.ReferenceUploadDataManager" />
+
+</configure>

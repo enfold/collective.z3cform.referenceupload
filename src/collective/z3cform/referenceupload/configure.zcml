@@ -1,0 +1,29 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+  <include file="widgets.zcml" />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="Reference Upload Widget"
+      directory="profiles/default"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="demo"
+      title="Reference Upload Widget demo"
+      directory="profiles/demo"
+      description="Demo dx content type containing Reference Upload field"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <adapter
+      factory=".widget.ReferenceUploadFieldWidget"
+      for=".interfaces.IReferenceUploadField
+            z3c.form.interfaces.IFormLayer"
+      />
+
+</configure>

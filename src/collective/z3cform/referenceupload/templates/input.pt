@@ -1,0 +1,117 @@
+<tal:root>
+<div>
+    <style>
+        .querySelectSearch div {display:none};
+    </style>
+    <script type="text/javascript">
+        function updateReferenceUploadWidget(fieldId, option) {
+            var upload_box = $('#box_' + fieldId);
+            var select_box = $('#formfield-' + fieldId + '-widgets-query');
+            var options = $('#' + fieldId + '-input-fields span.option');
+            switch(option){
+                case 'keep': 
+                    upload_box.hide();
+                    select_box.hide();
+                    options.hide();
+                    break;
+                case 'reference':
+                    upload_box.hide();
+                    select_box.show();
+                    options.show();
+                    break;
+                case 'upload':
+                    upload_box.show();
+                    select_box.hide();
+                    options.hide();
+                    break;
+            }
+        }
+    </script>
+
+    <tal:img replace="structure view/formatted_value" />
+
+    <div tal:define="fieldName string:${view/name};
+                     fieldId string:${view/id};">
+
+      <tal:hasValue tal:condition="view/formatted_value">
+        <input class="noborder"
+               type="radio"
+               value="select"
+               checked="checked"
+               tal:attributes="name string:${fieldName}_option;
+                               id string:${fieldName}_keep;
+                               onclick string:updateReferenceUploadWidget('$fieldId', 'keep')"/>
+        <label for="" i18n:domain="archetypes.uploadreferencewidget"
+               tal:attributes="for string:${fieldName}_keep"
+               i18n:translate="label_keep_existing_content">
+               Keep existing value
+        </label>
+      <br />        
+      </tal:hasValue>
+      <input class="noborder"
+             type="radio"
+             value="select"
+             tal:attributes="name string:${fieldName}_option;
+                             id string:${fieldName}_select;
+                             onclick string:updateReferenceUploadWidget('$fieldId', 'reference')"/>
+      <label for="" i18n:domain="archetypes.uploadreferencewidget"
+             tal:attributes="for string:${fieldName}_select"
+             i18n:translate="label_reference_existing_content">
+             Reference an existing content item
+      </label>
+      <br />
+      <input class="noborder"
+             type="radio"
+             value="upload"
+             tal:attributes="name string:${fieldName}_option;
+                             id string:${fieldName}_upload;
+                             onclick string:updateReferenceUploadWidget('$fieldId', 'upload')"/>
+      <label for="" i18n:domain="archetypes.uploadreferencewidget"
+             tal:attributes="for string:${fieldName}_upload;"
+             i18n:translate="label_upload_new_file">
+             Upload a new file and reference it
+      </label>
+
+      
+      <div id="box_upload" tal:attributes="id string:box_${fieldId}"
+           style="margin-top: 0.5em; display:none;">
+          <div id="inputs" tal:attributes="id string:${fieldName}_inputs">
+              <input type="file"
+                     size="30"
+                     tal:attributes="name string:${fieldName}_file:list;
+                                     id string:${fieldName}_file" />
+          </div>
+      </div>
+
+    </div>
+</div>
+
+<i18n:domain i18n:domain="plone.formwidget.contenttree">
+    <div tal:attributes="id string:${view/id}-autocomplete">
+        <tal:block replace="structure view/subform/render" />
+        <div tal:attributes="id string:${view/id}-input-fields"
+             class="autocompleteInputWidget"
+             tal:content="structure view/renderQueryWidget" />
+    </div>
+    <div class="contenttreeWindow"
+         tal:attributes="id string:${view/id}-contenttree-window">
+        <div class="contenttreeWindowHeader">
+            <h2 i18n:translate="heading_contenttree_browse">Browse for items</h2>
+            <em tal:condition="view/multi_select"
+                i18n:translate="heading_contenttree_help">Press Ctrl to select multiple items.
+            </em>
+        </div>
+        <div class="contenttreeWidget"
+            tal:attributes="id string:${view/id}-contenttree">
+        </div>
+        <div class="contenttreeWindowActions">
+            <input class="context contentTreeAdd" type="button"
+                   i18n:attributes="value label_contenttree_add" value="Add"/>
+            <input class="standalone contentTreeCancel"
+                   i18n:attributes="value label_contenttree_cancel" type="button" value="Cancel"/>
+        </div>
+    </div>
+    <script type="text/javascript" tal:content="structure view/js"></script>
+</i18n:domain>
+
+</tal:root>
