@@ -1,10 +1,22 @@
 <tal:root>
     <span id="" class=""
-        tal:define="fieldName string:${view/name}"
+        tal:define="fieldName string:${view/name};
+                    file_type view/file_content_type;
+                    filename view/filename;"
         tal:attributes="name fieldName;
                         class view/klass;
                         style view/style;
                         title view/title;">
-        <tal:field replace="structure view/formatted_value" />
+        <tal:image condition="python: file_type == 'Image'">
+            <img src="image.png" tal:attributes="src string:${view/formatted_value}/@@images/image/preview" />
+        </tal:image>
+        <tal:file condition="python: file_type == 'File'">
+            <a href="filde.pdf" tal:attributes="href string:${view/formatted_value}/file"
+                tal:define="file view/object_value;
+                            icon file/getIcon">
+                <img tal:attributes="src string:${context/portal_url}/$icon;" />
+                <tal:title replace="filename" />
+            </a>
+        </tal:file>
     </span>
 </tal:root>

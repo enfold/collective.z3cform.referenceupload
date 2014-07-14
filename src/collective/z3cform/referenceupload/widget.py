@@ -27,14 +27,20 @@ class ReferenceUploadWidget(z3c.form.widget.Widget, ContentTreeWidget):
         except TypeError:
             return None
 
-    def formatted_value(self):
-        """Returns url of referenced object or None"""
+    def object_value(self):
+        """Returns the related object"""
         rel_path = self.raw_value()
         if rel_path:
             object_path = getUtility(IObjectPath)
             obj = object_path.resolve(rel_path)
-            return obj.tag()
-        return None
+            if obj:
+                return obj
+
+    def formatted_value(self):
+        """Returns url of referenced object or None"""
+        obj = self.object_value()
+        if obj:
+            return obj.absolute_url()
 
     def update(self):
         """Update widget"""
@@ -59,6 +65,22 @@ class ReferenceUploadWidget(z3c.form.widget.Widget, ContentTreeWidget):
         elif option == u'keep':
             return self.request.get(self.name + '_raw_value')
         return default
+
+    def filename(self):
+        """Returns the name of the related file"""
+        obj = self.object_value()
+        if obj:
+            return obj.getFilename()
+
+    def file_content_type(self):
+        """Returns the content_type of the related file"""
+        obj = self.object_value()
+        if obj:
+            content_type = obj.content_type
+            if content_type.startswith('image'):
+                return 'Image'
+            else:
+                return 'File'
 
 
 @implementer(z3c.form.interfaces.IFieldWidget)

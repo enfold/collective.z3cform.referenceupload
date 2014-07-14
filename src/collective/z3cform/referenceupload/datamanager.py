@@ -1,3 +1,5 @@
+import mimetypes
+
 import zope.publisher.browser
 import ZPublisher.HTTPRequest
 
@@ -26,28 +28,23 @@ class ReferenceUploadDataManager(RelationDataManager):
         """Sets the relationship target, creates a new instance of
         image/file object if upload is done
         """
+        # No value to store
         if value is None:
             return super(ReferenceUploadDataManager, self).set(None)
+
+        # Obtain current value
         current = None
         try:
             current = super(ReferenceUploadDataManager, self).get()
         except AttributeError:
             pass
 
+        # Create object from uploaded file
         if isinstance(value, FILE_UPLOAD):
-            filename = value.filename
-            filecontent = value.read()
-            container = getSite()
-            kwargs = {
-                'image': filecontent
-            }
-            new_image_id = container.invokeFactory('Image', filename, **kwargs)
-            obj = getattr(container, new_image_id)
-            value = '/'.join(obj.getPhysicalPath())
+            value = self.create_object(value)
 
         object_path = getUtility(IObjectPath)
         obj = object_path.resolve(value)
-
         intids = getUtility(IIntIds)
         to_id = intids.getId(obj)
 
@@ -57,3 +54,24 @@ class ReferenceUploadDataManager(RelationDataManager):
         else:
             # otherwise create a relationship
             super(ReferenceUploadDataManager, self).set(obj)
+
+    def create_object(self, fileobj):
+        """Creates object of appropriate type (Image/File) and returns
+        it's physical path.
+        """
+        filename = fileobj.filename
+        folder = getSite()
+        content = 'File'
+        mimetype = mimetypes.guess_type(filename)[0] or ""
+        if mimetype.startswith('image'):
+            content = 'Image'
+
+        # Create the new content
+        old_id = folder.generateUniqueId(content)
+        new_id = folder.invokeFactory(content, id=old_id, title=filename)
+        obj = getattr(folder, new_id)
+        obj._renameAfterCreation()
+        obj.unmarkCreationFlag()
+        obj.update_data(fileobj, mimetype)
+        obj.reindexObject()
+        return '/'.join(obj.getPhysicalPath())
