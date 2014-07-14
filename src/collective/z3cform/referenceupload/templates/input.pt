@@ -1,5 +1,6 @@
 <tal:root>
-<div>
+<i18n:domain i18n:domain="collective.z3cform.referenceupload">
+
     <style>
         .querySelectSearch div {display:none};
     </style>
@@ -9,7 +10,8 @@
             var select_box = $('#formfield-' + fieldId + '-widgets-query');
             var options = $('#' + fieldId + '-input-fields span.option');
             switch(option){
-                case 'keep': 
+                case 'remove':
+                case 'keep':
                     upload_box.hide();
                     select_box.hide();
                     options.hide();
@@ -34,19 +36,37 @@
                      fieldId string:${view/id};">
 
       <tal:hasValue tal:condition="view/formatted_value">
+
+        <input type="hidden"
+               tal:attributes="id string:${fieldName}_raw_value;
+                               name string:${fieldName}_raw_value;
+                               value view/raw_value;" />
+        
         <input class="noborder"
                type="radio"
-               value="select"
+               value="keep"
                checked="checked"
                tal:attributes="name string:${fieldName}_option;
                                id string:${fieldName}_keep;
                                onclick string:updateReferenceUploadWidget('$fieldId', 'keep')"/>
-        <label for="" i18n:domain="archetypes.uploadreferencewidget"
+        <label for=""
                tal:attributes="for string:${fieldName}_keep"
                i18n:translate="label_keep_existing_content">
                Keep existing value
         </label>
-      <br />        
+        <br />
+        <input class="noborder"
+               type="radio"
+               value="remove"
+               tal:attributes="name string:${fieldName}_option;
+                               id string:${fieldName}_remove;
+                               onclick string:updateReferenceUploadWidget('$fieldId', 'remove')"/>
+        <label for=""
+               tal:attributes="for string:${fieldName}_remove"
+               i18n:translate="label_remove_existing_reference">
+               Remove existing value
+        </label>
+        <br />
       </tal:hasValue>
       <input class="noborder"
              type="radio"
@@ -54,7 +74,7 @@
              tal:attributes="name string:${fieldName}_option;
                              id string:${fieldName}_select;
                              onclick string:updateReferenceUploadWidget('$fieldId', 'reference')"/>
-      <label for="" i18n:domain="archetypes.uploadreferencewidget"
+      <label for=""
              tal:attributes="for string:${fieldName}_select"
              i18n:translate="label_reference_existing_content">
              Reference an existing content item
@@ -66,7 +86,7 @@
              tal:attributes="name string:${fieldName}_option;
                              id string:${fieldName}_upload;
                              onclick string:updateReferenceUploadWidget('$fieldId', 'upload')"/>
-      <label for="" i18n:domain="archetypes.uploadreferencewidget"
+      <label for=""
              tal:attributes="for string:${fieldName}_upload;"
              i18n:translate="label_upload_new_file">
              Upload a new file and reference it
@@ -84,9 +104,7 @@
       </div>
 
     </div>
-</div>
 
-<i18n:domain i18n:domain="plone.formwidget.contenttree">
     <div tal:attributes="id string:${view/id}-autocomplete">
         <tal:block replace="structure view/subform/render" />
         <div tal:attributes="id string:${view/id}-input-fields"
