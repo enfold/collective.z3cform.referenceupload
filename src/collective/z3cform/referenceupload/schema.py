@@ -12,6 +12,11 @@ class ReferenceUploadField(RelationChoice):
 
     def _validate(self, value):
         return
+        # try:
+        #     obj = self.context.restrictedTraverse(value)
+        #     return super(ReferenceUploadField, self)._validate(obj)
+        # except KeyError:
+        #     return
 
     def fromUnicode(self, value):
         if isinstance(value, unicode):

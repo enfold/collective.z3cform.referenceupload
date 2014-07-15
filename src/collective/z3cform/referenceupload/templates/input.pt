@@ -30,30 +30,11 @@
         }
     </script>
 
-    <!-- TODO: use macro render instead oc copy-paste from display.pt-->
-    <span id="" class=""
-        tal:define="fieldName string:${view/name};
-                    file_type view/file_content_type;
-                    filename view/filename;"
-        tal:attributes="name fieldName;
-                        class view/klass;
-                        style view/style;
-                        title view/title;">
-        <tal:image condition="python: file_type == 'Image'">
-            <img src="image.png" tal:attributes="src string:${view/formatted_value}/@@images/image/preview" />
-        </tal:image>
-        <tal:file condition="python: file_type == 'File'">
-            <a href="filde.pdf" tal:attributes="href string:${view/formatted_value}/file"
-                tal:define="file view/object_value;
-                            icon file/getIcon">
-                <img tal:attributes="src string:${context/portal_url}/$icon;" />
-                <tal:title replace="filename" />
-            </a>
-        </tal:file>
-    </span>
+    <tal:display replace="structure view/render_display" />
 
     <div tal:define="fieldName string:${view/name};
-                     fieldId string:${view/id};">
+                     fieldId string:${view/id};
+                     option python: request.get(fieldName + '_option')">
 
       <tal:hasValue tal:condition="view/formatted_value">
 
@@ -68,6 +49,7 @@
                checked="checked"
                tal:attributes="name string:${fieldName}_option;
                                id string:${fieldName}_keep;
+                               checked python: option not in ['remove', 'select', 'upload'] and 'checked' or None;
                                onclick string:updateReferenceUploadWidget('$fieldId', 'keep')"/>
         <label for=""
                tal:attributes="for string:${fieldName}_keep"
@@ -80,6 +62,7 @@
                value="remove"
                tal:attributes="name string:${fieldName}_option;
                                id string:${fieldName}_remove;
+                               checked python: option == 'remove' and 'checked' or None;
                                onclick string:updateReferenceUploadWidget('$fieldId', 'remove')"/>
         <label for=""
                tal:attributes="for string:${fieldName}_remove"
@@ -93,6 +76,7 @@
              value="select"
              tal:attributes="name string:${fieldName}_option;
                              id string:${fieldName}_select;
+                             checked python: option == 'select' and 'checked' or None;
                              onclick string:updateReferenceUploadWidget('$fieldId', 'reference')"/>
       <label for=""
              tal:attributes="for string:${fieldName}_select"
@@ -105,6 +89,7 @@
              value="upload"
              tal:attributes="name string:${fieldName}_option;
                              id string:${fieldName}_upload;
+                             checked python: option == 'upload' and 'checked' or None;
                              onclick string:updateReferenceUploadWidget('$fieldId', 'upload')"/>
       <label for=""
              tal:attributes="for string:${fieldName}_upload;"

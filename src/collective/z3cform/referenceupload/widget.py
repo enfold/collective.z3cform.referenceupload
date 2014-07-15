@@ -3,6 +3,7 @@ from z3c.formwidget.query.widget import QuerySubForm, QueryContext
 from z3c.objpath.interfaces import IObjectPath
 from zope.interface import implements, implementer
 from zope.component import getMultiAdapter, getUtility
+from zope.pagetemplate.interfaces import IPageTemplate
 from plone.formwidget.contenttree.widget import ContentTreeWidget
 
 from .interfaces import IReferenceUploadWidget
@@ -65,6 +66,13 @@ class ReferenceUploadWidget(z3c.form.widget.Widget, ContentTreeWidget):
         elif option == u'keep':
             return self.request.get(self.name + '_raw_value')
         return default
+
+    def render_display(self):
+        """Render the plain widget without additional layout"""
+        template = getMultiAdapter(
+            (self.context, self.request, self.form, self.field, self),
+            IPageTemplate, name=z3c.form.interfaces.DISPLAY_MODE)
+        return template(self)
 
     def filename(self):
         """Returns the name of the related file"""
