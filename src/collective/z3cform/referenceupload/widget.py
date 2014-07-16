@@ -57,8 +57,9 @@ class ReferenceUploadWidget(z3c.form.widget.Widget, ContentTreeWidget):
         option = self.request.get(self.name + '_option')
         if option == u'upload':
             file_upload = self.request.get(self.name + '_file')
-            if file_upload and file_upload[0]:
-                file_upload = file_upload[0]
+            if file_upload:
+                if isinstance(file_upload, list):
+                    file_upload = file_upload[0]
                 if file_upload.filename:
                     return file_upload
         elif option == u'select':

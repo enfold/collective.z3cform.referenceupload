@@ -16,7 +16,7 @@
                     select_box.hide();
                     options.hide();
                     break;
-                case 'reference':
+                case 'select':
                     upload_box.hide();
                     select_box.show();
                     options.show();
@@ -28,13 +28,26 @@
                     break;
             }
         }
+        $( document ).ready(function() {
+            var selected_options = $("input[id^='form.widgets']:checked")
+            selected_options.each(function(index) {
+                var fieldId = this.id.split('.').join('-').split('_')[0];
+                var fieldValue = this.value;
+                updateReferenceUploadWidget(fieldId, fieldValue);
+                if (fieldValue == 'select') {
+                    var query_widget = $("#" + fieldId + "-widgets-query");
+                    formwidget_autocomplete_new_value(query_widget, '/Plone/8129_MockupCover.jpg', '8129_MockupCover.jpg');
+                }
+            });
+        });
     </script>
 
     <tal:display replace="structure view/render_display" />
 
     <div tal:define="fieldName string:${view/name};
                      fieldId string:${view/id};
-                     option python: request.get(fieldName + '_option')">
+                     file_upload python: request.get(fieldName + '_upload');
+                     option python: request.get(fieldName + '_option');">
 
       <tal:hasValue tal:condition="view/formatted_value">
 
@@ -77,7 +90,7 @@
              tal:attributes="name string:${fieldName}_option;
                              id string:${fieldName}_select;
                              checked python: option == 'select' and 'checked' or None;
-                             onclick string:updateReferenceUploadWidget('$fieldId', 'reference')"/>
+                             onclick string:updateReferenceUploadWidget('$fieldId', 'select')"/>
       <label for=""
              tal:attributes="for string:${fieldName}_select"
              i18n:translate="label_reference_existing_content">
@@ -103,7 +116,8 @@
           <div id="inputs" tal:attributes="id string:${fieldName}_inputs">
               <input type="file"
                      size="30"
-                     tal:attributes="name string:${fieldName}_file:list;
+                     tal:attributes="value string:${fieldName}_file;
+                                     name string:${fieldName}_file;
                                      id string:${fieldName}_file" />
           </div>
       </div>
