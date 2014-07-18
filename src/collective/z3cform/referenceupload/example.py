@@ -10,7 +10,6 @@ class IExample(form.Schema):
     """Schema for example content item with reference upload field"""
 
     form.widget('upload', ReferenceUploadFieldWidget)
-    form.widget('upload2', ReferenceUploadFieldWidget)
 
     title = schema.TextLine(
         title=u"Title",
@@ -21,15 +20,5 @@ class IExample(form.Schema):
         title=u"Reference upload field",
         required=True,
         source=ObjPathSourceBinder(),
-    )
-
-    desc = schema.TextLine(
-        title=u"Desc",
-        description=u"Content Desc",
-    )
-
-    upload2 = ReferenceUploadField(
-        title=u"Reference upload field 2",
-        required=False,
-        source=ObjPathSourceBinder(),
+        destination='/destination_folder'
     )

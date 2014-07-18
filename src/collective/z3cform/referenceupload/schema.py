@@ -11,6 +11,10 @@ class ReferenceUploadField(RelationChoice):
 
     implements(IReferenceUploadField, IFromUnicode)
 
+    def __init__(self, destination=None, **kw):
+        self.destination = destination
+        super(ReferenceUploadField, self).__init__(**kw)
+
     def _validate(self, value):
         if isinstance(value, FILE_UPLOAD):
             return

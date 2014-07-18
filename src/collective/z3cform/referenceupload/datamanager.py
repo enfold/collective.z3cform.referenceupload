@@ -60,7 +60,9 @@ class ReferenceUploadDataManager(RelationDataManager):
         it's physical path.
         """
         filename = fileobj.filename
-        folder = getSite()
+        site = getSite()
+        dest_path = self.field.destination.strip('/')
+        folder = site.restrictedTraverse(str(dest_path))
         content = 'File'
         mimetype = mimetypes.guess_type(filename)[0] or ""
         if mimetype.startswith('image'):
