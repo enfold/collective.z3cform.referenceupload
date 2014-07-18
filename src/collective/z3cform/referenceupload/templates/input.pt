@@ -28,7 +28,7 @@
                     break;
             }
         }
-        $( document ).ready(function() {
+        $(document).ready(function() {
             var selected_options = $("input[id^='form.widgets']:checked")
             selected_options.each(function(index) {
                 var fieldId = this.id.split('.').join('-').split('_')[0];
@@ -36,7 +36,12 @@
                 updateReferenceUploadWidget(fieldId, fieldValue);
                 if (fieldValue == 'select') {
                     var query_widget = $("#" + fieldId + "-widgets-query");
-                    formwidget_autocomplete_new_value(query_widget, '/Plone/8129_MockupCover.jpg', '8129_MockupCover.jpg');
+                    var base_id = query_widget[0].id.replace(/-widgets-query$/,"");
+                    var widget_base = $('#'+base_id+"-input-fields");
+                    widget_base.data('input_type', 'radio');
+                    var original = $('#' + fieldId + '_raw_value');
+                    console.log('#' + fieldId + '_raw_value', original);
+                    formwidget_autocomplete_new_value(query_widget, original.attr('value'), original.attr('title'));
                 }
             });
         });
@@ -52,9 +57,11 @@
       <tal:hasValue tal:condition="view/formatted_value">
 
         <input type="hidden"
-               tal:attributes="id string:${fieldId}_raw_value;
-                               name string:${fieldName}_raw_value;
-                               value view/raw_value;" />
+              tal:define="obj view/object_value;"
+              tal:attributes="id string:${fieldId}_raw_value;
+                              name string:${fieldName}_raw_value;
+                              title obj/Title;
+                              value view/raw_value;" />
         
         <input class="noborder"
                type="radio"

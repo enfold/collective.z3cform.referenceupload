@@ -19,6 +19,8 @@ class ReferenceUploadWidget(z3c.form.widget.Widget, ContentTreeWidget):
 
     def raw_value(self):
         """Returns physical path of referenced object or None"""
+        if self.request.get(self.name):
+            return self.request.get(self.name)
         dm = getMultiAdapter(
             (self.context, self.field), z3c.form.interfaces.IDataManager)
         try:
@@ -33,7 +35,7 @@ class ReferenceUploadWidget(z3c.form.widget.Widget, ContentTreeWidget):
         rel_path = self.raw_value()
         if rel_path:
             object_path = getUtility(IObjectPath)
-            obj = object_path.resolve(rel_path)
+            obj = object_path.resolve(str(rel_path))
             if obj:
                 return obj
 
