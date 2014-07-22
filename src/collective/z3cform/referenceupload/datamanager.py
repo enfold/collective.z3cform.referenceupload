@@ -46,7 +46,7 @@ class ReferenceUploadDataManager(RelationDataManager):
         object_path = getUtility(IObjectPath)
         obj = object_path.resolve(value)
         intids = getUtility(IIntIds)
-        to_id = intids.getId(obj)
+        to_id = intids.register(obj)
 
         if IRelationValue.providedBy(current):
             # If we already have a relation, just set the to_id
