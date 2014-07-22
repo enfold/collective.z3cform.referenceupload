@@ -3,5 +3,7 @@
   <version>1.0</version>
   <dependencies>
       <dependency>profile-collective.z3cform.referenceupload:default</dependency>
+      <dependency>profile-plone.formwidget.contenttree:default</dependency>
+      <dependency>profile-plone.app.relationfield:default</dependency>
   </dependencies>
 </metadata>

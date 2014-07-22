@@ -18,7 +18,7 @@ class IExample(form.Schema):
 
     upload = ReferenceUploadField(
         title=u"Reference upload field",
-        required=True,
+        required=False,
         source=ObjPathSourceBinder(),
         destination='/destination_folder'
     )
