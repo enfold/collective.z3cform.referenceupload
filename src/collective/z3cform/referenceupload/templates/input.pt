@@ -49,20 +49,26 @@
 
     <tal:display replace="structure view/render_display" />
 
-    <div tal:define="fieldName string:${view/name};
+    <div tal:define="workflowTool context/portal_workflow;
+                     fieldName string:${view/name};
                      fieldId string:${view/id};
+                     obj view/object_value;
                      file_upload python: request.get(fieldName + '_upload');
                      option python: request.get(fieldName + '_option');">
 
       <tal:hasValue tal:condition="view/formatted_value">
 
+        <tal:wfstate condition="python: workflowTool.getChainForPortalType(obj.portal_type)">
+          Review state: <tal:wfstate replace="python: workflowTool.getInfoFor(obj, 'review_state')" />
+          <br />
+        </tal:wfstate>
+
         <input type="hidden"
-              tal:define="obj view/object_value;"
               tal:attributes="id string:${fieldId}_raw_value;
                               name string:${fieldName}_raw_value;
                               title obj/Title;
                               value view/raw_value;" />
-        
+
         <input class="noborder"
                type="radio"
                value="keep"
@@ -117,7 +123,7 @@
              Upload a new file and reference it
       </label>
 
-      
+
       <div id="box_upload" tal:attributes="id string:box_${fieldId}"
            style="margin-top: 0.5em; display:none;">
           <div id="inputs" tal:attributes="id string:${fieldName}_inputs">
