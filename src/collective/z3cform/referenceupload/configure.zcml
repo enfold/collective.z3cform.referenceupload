@@ -28,4 +28,8 @@
             z3c.form.interfaces.IFormLayer"
       />
 
+   <utility component=".supermodel.ReferenceUploadFieldHandler"
+      name="collective.z3cform.referenceupload.ReferenceUploadField"
+      />
+
 </configure>
