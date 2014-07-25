@@ -27,9 +27,10 @@
       for=".interfaces.IReferenceUploadField
             z3c.form.interfaces.IFormLayer"
       />
-
-   <utility component=".supermodel.ReferenceUploadFieldHandler"
-      name="collective.z3cform.referenceupload.ReferenceUploadField"
-      />
+   <configure zcml:condition="installed plone.supermodel">
+     <utility component=".supermodel.ReferenceUploadFieldHandler"
+              name="collective.z3cform.referenceupload.ReferenceUploadField"
+     />
+   </configure>
 
 </configure>
