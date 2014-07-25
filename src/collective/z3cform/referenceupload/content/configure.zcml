@@ -1,0 +1,33 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="psueduc.directory">
+
+    <include package="Products.CMFCore" />
+
+    <!-- Person edit view -->
+    <browser:page
+        for=".example.IExample"
+        name="edit"
+        class=".views.EditView"
+        permission="cmf.ModifyPortalContent"
+        />
+
+    <!-- Person add form -->
+    <adapter
+        for="Products.CMFCore.interfaces.IFolderish
+             zope.publisher.interfaces.browser.IDefaultBrowserLayer
+             plone.dexterity.interfaces.IDexterityFTI"
+        name="example"
+        provides="zope.publisher.interfaces.browser.IBrowserPage"
+        factory=".views.AddView"
+        />
+
+    <class class=".views.AddView">
+        <require
+            permission="cmf.AddPortalContent"
+            interface="zope.publisher.interfaces.browser.IBrowserPage"
+            />
+    </class>
+
+</configure>

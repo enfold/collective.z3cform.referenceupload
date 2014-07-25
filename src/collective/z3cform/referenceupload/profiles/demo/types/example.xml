@@ -15,8 +15,10 @@
   <property name="allow_discussion">False</property>
 
   <!-- schema and class used for content items -->
-  <property name="schema">collective.z3cform.referenceupload.example.IExample</property>
-  <property name="klass">plone.dexterity.content.Item</property>
+  <property name="klass">collective.z3cform.referenceupload.content.example.Example</property>
+  <property name="schema"></property>
+  <property name="model_source"></property>
+  <property name="model_file">collective.z3cform.referenceupload.content:example.xml</property>
 
   <property name="behaviors">
      <element value="plone.app.content.interfaces.INameFromTitle" />

@@ -1,9 +1,8 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
-  <grok:grok package="." />
   <include file="widgets.zcml" />
 
   <genericsetup:registerProfile
@@ -27,6 +26,7 @@
       for=".interfaces.IReferenceUploadField
             z3c.form.interfaces.IFormLayer"
       />
+
    <configure zcml:condition="installed plone.supermodel">
      <utility component=".supermodel.ReferenceUploadFieldHandler"
               name="collective.z3cform.referenceupload.ReferenceUploadField"
