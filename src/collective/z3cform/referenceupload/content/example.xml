@@ -1,0 +1,20 @@
+<model xmlns="http://namespaces.plone.org/supermodel/schema"
+       xmlns:marshal="http://namespaces.plone.org/supermodel/marshal"
+       xmlns:form="http://namespaces.plone.org/supermodel/form">
+  <schema>
+    <field name="title" type="zope.schema.TextLine">
+      <description>Content title</description>
+      <title>Title</title>
+    </field>
+
+    <field name="upload"
+           type="collective.z3cform.referenceupload.ReferenceUploadField"
+           form:widget="collective.z3cform.referenceupload.widget.ReferenceUploadFieldWidget">
+      <description />
+      <required>False</required>
+      <title>Reference upload field</title>
+      <destination>/destination-folder</destination>
+      <source>plone.formwidget.contenttree.obj_path_src_binder</source>
+    </field>
+  </schema>
+</model>
