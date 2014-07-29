@@ -18,7 +18,7 @@
         for="Products.CMFCore.interfaces.IFolderish
              zope.publisher.interfaces.browser.IDefaultBrowserLayer
              plone.dexterity.interfaces.IDexterityFTI"
-        name="example"
+        name="collective.z3cform.referenceupload.example"
         provides="zope.publisher.interfaces.browser.IBrowserPage"
         factory=".views.AddView"
         />

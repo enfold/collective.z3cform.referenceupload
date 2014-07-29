@@ -4,6 +4,7 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
   <include file="widgets.zcml" />
+  <include package=".content" />
 
   <genericsetup:registerProfile
       name="default"

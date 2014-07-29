@@ -87,11 +87,7 @@ class ReferenceUploadWidget(z3c.form.widget.Widget, ContentTreeWidget):
         """Returns the content_type of the related file"""
         obj = self.object_value()
         if obj:
-            content_type = obj.content_type
-            if content_type.startswith('image'):
-                return 'Image'
-            else:
-                return 'File'
+            return obj.portal_type
 
 
 @implementer(z3c.form.interfaces.IFieldWidget)
