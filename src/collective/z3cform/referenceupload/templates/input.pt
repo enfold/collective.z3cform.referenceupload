@@ -47,8 +47,6 @@
         });
     </script>
 
-    <tal:display replace="structure view/render_display" />
-
     <div tal:define="workflowTool context/portal_workflow;
                      fieldName string:${view/name};
                      fieldId string:${view/id};
@@ -56,13 +54,22 @@
                      file_upload python: request.get(fieldName + '_upload');
                      option python: request.get(fieldName + '_option');">
 
-      <tal:hasValue tal:condition="view/formatted_value">
 
-        <tal:wfstate condition="python: workflowTool.getChainForPortalType(obj.portal_type)">
-          Review state: <tal:wfstate replace="python: workflowTool.getInfoFor(obj, 'review_state')" />
-          <br />
-        </tal:wfstate>
+      <tal:display replace="structure view/render_display" />
 
+      <tal:wfstate condition="python: obj and workflowTool.getChainForPortalType(obj.portal_type)">
+        <br />
+        Review state: <tal:wfstate replace="python: workflowTool.getInfoFor(obj, 'review_state')" />
+      </tal:wfstate>
+      <br />
+      <tal:wcopy condition="python: view.object_value_working_copy(obj)">
+          <a href="" tal:attributes="href python: view.object_value_working_copy(obj).absolute_url() + '/view'">Working copy</a>:
+        <br />
+        <tal:display replace="structure python: view.render_display(wcopy=True)" />
+        <br />
+      </tal:wcopy>
+
+      <tal:hasValue tal:condition="obj">
         <input type="hidden"
               tal:attributes="id string:${fieldId}_raw_value;
                               name string:${fieldName}_raw_value;
@@ -97,6 +104,7 @@
         </label>
         <br />
       </tal:hasValue>
+
       <input class="noborder"
              type="radio"
              value="select"
@@ -134,7 +142,6 @@
                                      id string:${fieldName}_file" />
           </div>
       </div>
-
     </div>
 
     <div tal:attributes="id string:${view/id}-autocomplete">

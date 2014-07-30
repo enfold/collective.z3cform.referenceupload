@@ -1,10 +1,13 @@
 import z3c.form
+
 from z3c.formwidget.query.widget import QuerySubForm, QueryContext
 from z3c.objpath.interfaces import IObjectPath
 from zope.interface import implements, implementer
 from zope.component import getMultiAdapter, getUtility
 from zope.pagetemplate.interfaces import IPageTemplate
+
 from plone.formwidget.contenttree.widget import ContentTreeWidget
+from plone.app.iterate.relation import WorkingCopyRelation
 
 from .interfaces import IReferenceUploadWidget
 
@@ -39,11 +42,12 @@ class ReferenceUploadWidget(z3c.form.widget.Widget, ContentTreeWidget):
             if obj:
                 return obj
 
-    def formatted_value(self):
-        """Returns url of referenced object or None"""
-        obj = self.object_value()
+    def object_value_working_copy(self, obj):
+        """Returns the related object's working copy if it exists"""
         if obj:
-            return obj.absolute_url()
+            wcopies = obj.getBRefs(WorkingCopyRelation.relationship)
+            if wcopies:
+                return wcopies[0]
 
     def update(self):
         """Update widget"""
@@ -70,24 +74,15 @@ class ReferenceUploadWidget(z3c.form.widget.Widget, ContentTreeWidget):
             return self.request.get(self.name + '_raw_value')
         return default
 
-    def render_display(self):
+    def render_display(self, wcopy=False):
         """Render the plain widget without additional layout"""
         template = getMultiAdapter(
             (self.context, self.request, self.form, self.field, self),
             IPageTemplate, name=z3c.form.interfaces.DISPLAY_MODE)
-        return template(self)
-
-    def filename(self):
-        """Returns the name of the related file"""
         obj = self.object_value()
-        if obj:
-            return obj.getFilename()
-
-    def file_content_type(self):
-        """Returns the content_type of the related file"""
-        obj = self.object_value()
-        if obj:
-            return obj.portal_type
+        if wcopy:
+            obj = self.object_value_working_copy(obj)
+        return template(self, obj=obj)
 
 
 @implementer(z3c.form.interfaces.IFieldWidget)

@@ -44,6 +44,7 @@ setup(name='collective.z3cform.referenceupload',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'plone.app.iterate',
           'plone.app.relationfield',
           'plone.formwidget.contenttree>=1.0.7',
           'z3c.form==3.0.5',

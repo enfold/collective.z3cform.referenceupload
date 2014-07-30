@@ -5,7 +5,7 @@
 
     <include package="Products.CMFCore" />
 
-    <!-- Person edit view -->
+    <!-- Example edit view -->
     <browser:page
         for=".example.IExample"
         name="edit"
@@ -13,7 +13,7 @@
         permission="cmf.ModifyPortalContent"
         />
 
-    <!-- Person add form -->
+    <!-- Example add form -->
     <adapter
         for="Products.CMFCore.interfaces.IFolderish
              zope.publisher.interfaces.browser.IDefaultBrowserLayer

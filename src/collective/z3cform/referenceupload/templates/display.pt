@@ -1,17 +1,19 @@
-<tal:root>
+<tal:root
+    define="obj python: options.get('obj') or view.object_value();"
+    tal:condition="obj">
     <span id="" class=""
         tal:define="fieldName string:${view/name};
-                    file_type view/file_content_type;
-                    filename view/filename;"
+                    file_type obj/portal_type;
+                    filename obj/getFilename;"
         tal:attributes="name fieldName;
                         class view/klass;
                         style view/style;
                         title view/title;">
         <tal:image condition="python: file_type == 'Image'">
-            <img src="image.png" tal:attributes="src string:${view/formatted_value}/@@images/image/preview" />
+            <img src="image.png" tal:attributes="src string:${obj/absolute_url}/@@images/image/preview" />
         </tal:image>
         <tal:file condition="python: file_type == 'File'">
-            <a href="filde.pdf" tal:attributes="href string:${view/formatted_value}"
+            <a href="filde.pdf" tal:attributes="href string:${obj/absolute_url}"
                 tal:define="file view/object_value;
                             icon file/getIcon">
                 <img tal:attributes="src string:${context/portal_url}/$icon;" />

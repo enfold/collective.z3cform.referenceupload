@@ -3,13 +3,15 @@ import mimetypes
 import zope.publisher.browser
 import ZPublisher.HTTPRequest
 
-from zope.component import adapts, getUtility
+from zope.component import adapts, getUtility, getMultiAdapter
 from zope.component.hooks import getSite
 from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 from z3c.objpath.interfaces import IObjectPath
 from z3c.relationfield.interfaces import IRelationValue
 from plone.app.relationfield.widget import RelationDataManager
+from plone.app.iterate.interfaces import ICheckinCheckoutPolicy
+from plone.app.iterate.relation import WorkingCopyRelation
 
 from .interfaces import IReferenceUploadField
 
@@ -106,13 +108,18 @@ class ReferenceUploadDataManager(RelationDataManager):
         """Replaces the content of uploaded file/image at the working copy
         of the related object
         """
-        # TODO
-        # control = getMultiAdapter((related, self.context.REQUEST),
-        #     name=u"iterate_control")
-        # if control.checkout_allowed():
-        #     folder = related.aq_parent
-        #     working_copy = ICheckinCheckoutPolicy(related).checkout(folder)
+        control = getMultiAdapter(
+            (related, self.context.REQUEST), name=u"iterate_control")
+        policy = ICheckinCheckoutPolicy(related)
+        working_copies = related.getBRefs(WorkingCopyRelation.relationship)
+        if control.checkout_allowed():
+            folder = related.aq_parent
+            working_copy = policy.checkout(folder)
+        elif working_copies:
+            working_copy = working_copies[0]
+        else:
+            raise Exception(u"Can't obtain working copy.")
 
-
-        # #related.update_data(fileobj, mimetype)
-        # return '/'.join(related.getPhysicalPath())
+        working_copy.update_data(fileobj, mimetype)
+        working_copy.reindexObject()
+        return '/'.join(related.getPhysicalPath())

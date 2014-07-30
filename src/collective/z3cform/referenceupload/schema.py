@@ -26,9 +26,10 @@ class ReferenceUploadField(RelationChoice):
                 current_relation = self.get(self.context)
             except AttributeError:
                 current_relation = None
+            # prevent uploading regular file into Image object
             if current_relation:
                 related_obj = current_relation.to_object
-                if self.upload_behaviour == 'replace':
+                if self.upload_behaviour in ['replace', 'checkout']:
                     mimetype = mimetypes.guess_type(value.filename)[0] or ""
                     if related_obj.portal_type == 'Image':
                         if not mimetype.startswith('image'):

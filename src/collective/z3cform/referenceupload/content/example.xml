@@ -15,7 +15,7 @@
       <title>Reference upload field</title>
       <destination>/destination-folder</destination>
       <source>plone.formwidget.contenttree.obj_path_src_binder</source>
-      <upload_behaviour>checkout</upload_behaviour>
+      <upload_behaviour>create</upload_behaviour>
     </field>
   </schema>
 </model>
