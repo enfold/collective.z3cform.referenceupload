@@ -18,11 +18,11 @@ class AddForm(DefaultAddForm):
         new_destination = '/'.join((path, self.portal_type, 'upload'))
         self.widgets['upload'].field.destination = new_destination
 
-        # let's set the initial location where the content browser popup will
+        # XXX: let's set the initial location where the content browser popup will
         # be opened
-        ntq = self.widgets['upload'].source.navigation_tree_query.copy()
-        ntq['path']['query'] = new_destination
-        self.widgets['upload'].field.source.navigation_tree_query = ntq
+        # ntq = self.widgets['upload'].source.navigation_tree_query.copy()
+        # ntq['path']['query'] = new_destination
+        # self.widgets['upload'].field.source.navigation_tree_query = ntq
 
 
 class EditForm(DefaultEditForm):
@@ -38,11 +38,11 @@ class EditForm(DefaultEditForm):
         new_destination = '/'.join((path, self.portal_type, 'upload'))
         self.widgets['upload'].field.destination = new_destination
 
-        # let's set the initial location where the content browser popup will
+        # XXX: let's set the initial location where the content browser popup will
         # be opened
-        ntq = self.widgets['upload'].source.navigation_tree_query.copy()
-        ntq['path']['query'] = new_destination
-        self.widgets['upload'].field.source.navigation_tree_query = ntq
+        # ntq = self.widgets['upload'].source.navigation_tree_query.copy()
+        # ntq['path']['query'] = new_destination
+        # self.widgets['upload'].field.source.navigation_tree_query = ntq
 
 
 EditView = layout.wrap_form(EditForm)

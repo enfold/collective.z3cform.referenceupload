@@ -14,8 +14,8 @@
       <required>False</required>
       <title>Reference upload field</title>
       <destination>/destination-folder</destination>
-      <source>plone.formwidget.contenttree.obj_path_src_binder</source>
-      <upload_behaviour>create</upload_behaviour>
+      <vocabulary>plone.app.vocabularies.Catalog</vocabulary>
+      <upload_behaviour>checkout</upload_behaviour>
     </field>
   </schema>
 </model>

@@ -4,7 +4,7 @@
     <span id="" class=""
         tal:define="fieldName string:${view/name};
                     file_type obj/portal_type;
-                    filename obj/getFilename;"
+                    filename python: options.get('filename');"
         tal:attributes="name fieldName;
                         class view/klass;
                         style view/style;

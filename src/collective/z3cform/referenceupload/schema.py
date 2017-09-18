@@ -36,10 +36,13 @@ class ReferenceUploadField(RelationChoice):
                             raise WrongUploadFileType()
             return
         # validate relation possibility
-        try:
-            obj = self.context.restrictedTraverse(value)
+        catalog = self.context.portal_catalog
+        brains = catalog(UID=value)
+        if brains:
+            brain = brains[0]
+            obj = brain.getObject()
             return super(ReferenceUploadField, self)._validate(obj)
-        except KeyError:
+        else:
             raise ObjectDoesntExist(value)
 
     def fromUnicode(self, value):
